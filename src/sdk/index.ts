@@ -17,14 +17,42 @@ import {
   getAllDynamicFields,
   getReturnValuesFromInspectResults,
 } from '@/utils';
+import { DepositArgs, PromisedTransactionBlock } from './sdk.types';
 
 
 export class SDK {
-  
   constructor(
     public readonly provider: JsonRpcProvider,
     public readonly network: Network,
   ) {
     invariant(Object.values(Network).includes(network), 'Invalid network');
+  }
+
+  public async deposit({
+    txb,
+    assetList,
+    assetValue,
+    assetType
+  }: DepositArgs): PromisedTransactionBlock {
+    invariant(+assetValue > 0, 'Cannot add assetValue');
+
+    const objects = OBJECT_RECORD[this.network];
+    
+    txb.moveCall({
+      target: `${objects.MM_PACKAGE_ID}::interface::deposit`,
+      typeArguments: [assetType],
+      arguments: [
+        txb.object(objects.MM_MONEY_MARKET_STORAGE),
+        txb.object(objects.MM_INTEREST_RATE_STORAGE),
+        txb.object(objects.IPX_STORAGE),
+        txb.object(SUI_CLOCK_OBJECT_ID),
+        txb.makeMoveVec({
+          objects: assetList,
+        }),
+        txb.pure(assetValue)
+      ],
+    });
+
+    return txb;
   }
 }
