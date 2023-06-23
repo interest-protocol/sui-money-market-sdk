@@ -37,9 +37,9 @@ export class SDK {
     invariant(+assetValue > 0, 'Cannot add assetValue');
 
     const objects = OBJECT_RECORD[this.network];
-    
+
     txb.moveCall({
-      target: `${objects.MONEY_MARKET_PACKAGE_ID}::interface::deposit`,
+      target: `${objects.MONEY_MARKET_PACKAGE_ID}::ipx_money_market_sdk_interface::deposit`,
       typeArguments: [assetType],
       arguments: [
         txb.object(objects.MONEY_MARKET_STORAGE),
