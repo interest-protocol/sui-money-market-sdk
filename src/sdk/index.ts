@@ -28,22 +28,22 @@ export class SDK {
     invariant(Object.values(Network).includes(network), 'Invalid network');
   }
 
-  public async deposit({
+  public deposit({
     txb,
     assetList,
     assetValue,
     assetType
-  }: DepositArgs): PromisedTransactionBlock {
+  }: DepositArgs): TransactionBlock {
     invariant(+assetValue > 0, 'Cannot add assetValue');
 
     const objects = OBJECT_RECORD[this.network];
     
     txb.moveCall({
-      target: `${objects.MM_PACKAGE_ID}::interface::deposit`,
+      target: `${objects.MONEY_MARKET_PACKAGE_ID}::interface::deposit`,
       typeArguments: [assetType],
       arguments: [
-        txb.object(objects.MM_MONEY_MARKET_STORAGE),
-        txb.object(objects.MM_INTEREST_RATE_STORAGE),
+        txb.object(objects.MONEY_MARKET_STORAGE),
+        txb.object(objects.MONEY_MARKET_INTEREST_RATE_STORAGE),
         txb.object(objects.IPX_STORAGE),
         txb.object(SUI_CLOCK_OBJECT_ID),
         txb.makeMoveVec({
