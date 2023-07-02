@@ -1,55 +1,90 @@
-import { MakeMoveVecTransaction, TransactionBlock } from '@mysten/sui.js';
-import { Address, Amount } from '@/types';
+import {
+  MakeMoveVecTransaction,
+  SuiAddress,
+  TransactionBlock,
+} from '@mysten/sui.js';
+import { BigNumber } from 'bignumber.js';
 
 type SuiObject = MakeMoveVecTransaction['objects'][number];
 type Coin = SuiObject;
 export type PromisedTransactionBlock = Promise<TransactionBlock>;
 
-export interface EntryFuncArgs { txb: TransactionBlock; }
-export interface AccrueArgs extends EntryFuncArgs {}
-export interface AccrueSuidArgs extends EntryFuncArgs {}
+export interface EntryFuncArgs {
+  txb?: TransactionBlock;
+}
+
+export type CoinType = string;
+export type Amount = string;
+
+export interface MoneyMarket {
+  supplyRatePerYear: BigNumber; // 1e16 means 1% || 1e18 means 100%
+  borrowRatePerYear: BigNumber; // 1e16 means 1% || 1e18 means 100%
+  cash: BigNumber; // Coins available to be borrowed
+  collateralEnabled: boolean;
+  allocationPoints: BigNumber; // For IPX rewards
+  userPrincipal: BigNumber;
+  userShares: BigNumber;
+  userLoanPendingRewards: BigNumber;
+  userCollateralPendingRewards: BigNumber;
+  totalCollateralElastic: BigNumber;
+  totalCollateralBase: BigNumber;
+  totalLoanElastic: BigNumber;
+  totalLoanBase: BigNumber;
+  borrowCap: BigNumber;
+  collateralCap: BigNumber;
+  LTV: BigNumber;
+  accruedTimestamp: BigNumber;
+  decimals: number;
+  canBeCollateral: boolean;
+}
+
+export type MoneyMarketRecord = Record<string, MoneyMarket>;
+
+export interface GetMarketsArgs {
+  sender?: SuiAddress;
+}
+
+export interface EnterMarketArgs extends EntryFuncArgs {
+  assetType: CoinType;
+}
+
+export interface ExitMarketArgs extends EntryFuncArgs {
+  assetType: CoinType;
+}
 
 export interface DepositArgs extends EntryFuncArgs {
   assetList: Coin[];
   assetValue: Amount;
-  assetType: Address;
+  assetType: CoinType;
 }
 
 export interface WithdrawArgs extends EntryFuncArgs {
-  pricePotatoes: SuiObject[];
   sharesToRemove: Amount;
-  assetType: Address;
+  assetType: CoinType;
 }
 
 export interface BorrowArgs extends EntryFuncArgs {
-  pricePotatoes: SuiObject[];
   borrowValue: Amount;
-  assetType: Address;
+  assetType: CoinType;
 }
 
 export interface RepayArgs extends EntryFuncArgs {
   assetList: Coin[];
   assetValue: Amount;
-  assetType: Address;
+  assetType: CoinType;
   principalToRepay: Amount;
 }
 
-export interface ExitMarketArgs extends EntryFuncArgs {
-  pricePotatoes: SuiObject[];
+export interface GetRewardsArgs extends EntryFuncArgs {
+  assetType: CoinType;
 }
-export interface BorrowSuidArgs extends BorrowArgs {}
-export interface RepaySuidArgs extends RepayArgs {}
-export interface GetRewardsArgs extends EntryFuncArgs {}
-export interface GetAllRewardsArgs extends EntryFuncArgs {}
+
+export type GetAllRewardsArgs = EntryFuncArgs;
 
 export interface LiquidateArgs extends EntryFuncArgs {
-  pricePotatoes: SuiObject[];
-  assetList: Coin[];
-  assetValue: Amount;
-  borrower: Address;
+  loanAssetType: CoinType;
+  collateralAssetType: CoinType;
+  loanAssetList: Coin[];
+  loanAssetValue: Amount;
+  borrower: SuiAddress;
 }
-
-export interface LiquidateSuidArgs extends LiquidateArgs {}
-
-
-
