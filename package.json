@@ -30,7 +30,8 @@
     "build:tsup": "tsup ./src/index.ts --format esm,cjs --sourcemap",
     "build:types": "tsc --project tsconfig.json && resolve-tspaths",
     "build": "npm run build:types && npm run build:tsup",
-    "prepublishOnly": "npm run clean && npm run build"
+    "prepublishOnly": "npm run clean && npm run build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@mysten/bcs": "^0.7.2",
@@ -62,6 +63,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsconfig-paths-jest": "^0.0.1",
     "tsup": "^6.7.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "husky": "^8.0.0"
   }
 }
