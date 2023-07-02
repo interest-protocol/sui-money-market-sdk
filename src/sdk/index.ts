@@ -29,6 +29,7 @@ import {
 } from '@/constants';
 import { getReturnValuesFromInspectResults } from '@/utils';
 
+import { Rebase } from './rebase';
 import {
   BorrowArgs,
   DepositArgs,
@@ -112,6 +113,18 @@ export class SDK {
       const supplyRatePerMS = BigNumber(propOr(0, 'supply_rate', data));
       const borrowRatePerMS = BigNumber(propOr(0, 'borrow_rate', data));
 
+      const totalCollateralBase = BigNumber(
+        propOr(0, 'total_collateral_base', data),
+      );
+      const totalCollateralElastic = BigNumber(
+        propOr(0, 'total_collateral_elastic', data),
+      ).plus(supplyRatePerMS.multipliedBy(timeElapsed));
+
+      const totalLoanBase = BigNumber(propOr(0, 'total_loan_base', data));
+      const totalLoanElastic = BigNumber(
+        propOr(0, 'total_loan_elastic', data),
+      ).plus(borrowRatePerMS.multipliedBy(timeElapsed));
+
       return {
         ...acc,
         [key]: {
@@ -137,21 +150,20 @@ export class SDK {
           userCollateralPendingRewards: BigNumber(
             propOr(0, 'user_collateral_pending_rewards', data),
           ),
-          totalCollateralElastic: BigNumber(
-            propOr(0, 'total_collateral_elastic', data),
-          ).plus(supplyRatePerMS.multipliedBy(timeElapsed)),
-          totalCollateralBase: BigNumber(
-            propOr(0, 'total_collateral_base', data),
-          ),
-          totalLoanElastic: BigNumber(
-            propOr(0, 'total_loan_elastic', data),
-          ).plus(borrowRatePerMS.multipliedBy(timeElapsed)),
-          totalLoanBase: BigNumber(propOr(0, 'total_loan_base', data)),
+          totalCollateralElastic,
+          totalCollateralBase,
+          totalLoanElastic,
+          totalLoanBase,
           borrowCap: BigNumber(propOr(0, 'borrow_cap', data)),
           collateralCap: BigNumber(propOr(0, 'collateral_cap', data)),
           LTV: BigNumber(propOr(0, 'ltv', data)),
           accruedTimestamp,
           decimals: MONEY_MARKET_DECIMALS[this.network][key],
+          totalLoanRebase: new Rebase(totalLoanBase, totalLoanElastic),
+          totalCollateralRebase: new Rebase(
+            totalCollateralBase,
+            totalCollateralElastic,
+          ),
         },
       };
     }, {} as MoneyMarketRecord);

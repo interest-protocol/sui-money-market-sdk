@@ -5,6 +5,8 @@ import {
 } from '@mysten/sui.js';
 import { BigNumber } from 'bignumber.js';
 
+import { Rebase } from './rebase';
+
 type SuiObject = MakeMoveVecTransaction['objects'][number];
 type Coin = SuiObject;
 export type PromisedTransactionBlock = Promise<TransactionBlock>;
@@ -36,6 +38,8 @@ export interface MoneyMarket {
   accruedTimestamp: BigNumber;
   decimals: number;
   canBeCollateral: boolean;
+  totalCollateralRebase: Rebase;
+  totalLoanRebase: Rebase;
 }
 
 export type MoneyMarketRecord = Record<string, MoneyMarket>;
