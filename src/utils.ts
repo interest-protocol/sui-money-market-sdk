@@ -1,16 +1,5 @@
-import {
-  DevInspectResults,
-  JsonRpcProvider,
-  SuiObjectResponse,
-} from '@mysten/sui.js';
-import {
-  DynamicFieldInfo,
-  DynamicFieldPage,
-} from '@mysten/sui.js/src/types/dynamic_fields';
-import { head, isEmpty, pathOr, propOr } from 'ramda';
-import {
-  GetAllDynamicFieldsInternalArgs,
-} from './types';
+import { DevInspectResults } from '@mysten/sui.js';
+import { head, propOr } from 'ramda';
 
 export const getReturnValuesFromInspectResults = (
   x: DevInspectResults,
@@ -26,45 +15,4 @@ export const getReturnValuesFromInspectResults = (
   const returnValues = firstElem?.returnValues;
 
   return returnValues ? returnValues : null;
-};
-
-const getAllDynamicFieldsInternal = async ({
-  data,
-  cursor,
-  parentId,
-  provider,
-}: GetAllDynamicFieldsInternalArgs): Promise<DynamicFieldPage['data']> => {
-  const newData = await provider.getDynamicFields({
-    parentId,
-    cursor: cursor,
-  });
-
-  const nextData = data.concat(newData.data);
-
-  if (!newData.hasNextPage) return nextData;
-
-  return getAllDynamicFieldsInternal({
-    data: nextData,
-    cursor: newData.nextCursor,
-    parentId,
-    provider,
-  });
-};
-
-export const getAllDynamicFields = async (
-  provider: JsonRpcProvider,
-  parentId: string,
-) => {
-  const data = await provider.getDynamicFields({
-    parentId,
-  });
-
-  return data.hasNextPage
-    ? getAllDynamicFieldsInternal({
-        data: data.data,
-        cursor: data.nextCursor,
-        parentId,
-        provider,
-      })
-    : data.data;
 };
