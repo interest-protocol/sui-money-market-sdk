@@ -47,11 +47,23 @@ import {
 } from './sdk.types';
 
 export class SDK {
-  constructor(
+  protected constructor(
     public readonly provider: JsonRpcProvider,
     public readonly network: Network,
   ) {
     invariant(Object.values(Network).includes(network), 'Invalid network');
+  }
+
+  public static getDevNetSDK(provider: JsonRpcProvider): SDK {
+    return new SDK(provider, Network.DEVNET);
+  }
+
+  public static getTestNetSDK(provider: JsonRpcProvider): SDK {
+    return new SDK(provider, Network.TESTNET);
+  }
+
+  public static getMainNetSDK(provider: JsonRpcProvider): SDK {
+    return new SDK(provider, Network.MAINNET);
   }
 
   /**
@@ -615,5 +627,13 @@ export class SDK {
    */
   public getSUIDType(): string {
     return SUID_TYPE[this.network];
+  }
+
+  public getMoneyMarketConstants() {
+    return MONEY_MARKET_OBJECTS[this.network];
+  }
+
+  public getMoneyMarketKeys() {
+    return MONEY_MARKET_KEYS[this.network];
   }
 }
