@@ -122,21 +122,17 @@ export class SDK {
 
       const accruedTimestamp = BigNumber(propOr(0, 'accrued_timestamp', data));
 
-      const timeElapsed = new Date().getTime() - accruedTimestamp.toNumber();
-      const supplyRatePerMS = BigNumber(propOr(0, 'supply_rate', data));
-      const borrowRatePerMS = BigNumber(propOr(0, 'borrow_rate', data));
-
       const totalCollateralBase = BigNumber(
         propOr(0, 'total_collateral_base', data),
       );
+
       const totalCollateralElastic = BigNumber(
         propOr(0, 'total_collateral_elastic', data),
-      ).plus(supplyRatePerMS.multipliedBy(timeElapsed));
+      );
 
       const totalLoanBase = BigNumber(propOr(0, 'total_loan_base', data));
-      const totalLoanElastic = BigNumber(
-        propOr(0, 'total_loan_elastic', data),
-      ).plus(borrowRatePerMS.multipliedBy(timeElapsed));
+
+      const totalLoanElastic = BigNumber(propOr(0, 'total_loan_elastic', data));
 
       return {
         ...acc,
@@ -324,7 +320,7 @@ export class SDK {
     assetType,
     borrowValue,
   }: BorrowArgs): PromisedTransactionBlock {
-    invariant(+borrowValue > 0, 'sharesToRemove must be greater than zero');
+    invariant(+borrowValue > 0, 'borrowValue must be greater than zero');
     invariant(
       MONEY_MARKET_KEYS[this.network].includes(assetType),
       `${assetType} is not supported`,
