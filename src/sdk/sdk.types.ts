@@ -45,7 +45,7 @@ export interface MoneyMarket {
 export type MoneyMarketRecord = Record<string, MoneyMarket>;
 
 export interface GetMarketsArgs {
-  sender?: SuiAddress;
+  sender?: SuiAddress | null;
 }
 
 export interface EnterMarketArgs extends EntryFuncArgs {

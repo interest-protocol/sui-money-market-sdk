@@ -72,8 +72,9 @@ export class SDK {
    * @return Record of The Money Market. The key is the coin of the market
    */
   public async getMarkets({
-    sender = ZERO_ADDRESS,
+    sender: _sender,
   }: GetMarketsArgs): Promise<MoneyMarketRecord> {
+    const sender = _sender ? _sender : ZERO_ADDRESS;
     invariant(isValidSuiAddress(sender), 'Invalid Sui address');
 
     const txb = new TransactionBlock();
@@ -434,9 +435,9 @@ export class SDK {
     return txb;
   }
 
-  public async getPricePotatoesVector({
-    txb: _txb,
-  }: EntryFuncArgs): Promise<TransactionArgument[]> {
+  public async getPricePotatoesVector(
+    { txb: _txb }: EntryFuncArgs = { txb: undefined },
+  ): Promise<TransactionArgument[]> {
     const pythPriceFeedIds = PYTH_PRICE_FEED_IDS[this.network];
 
     const pythConnection = new PriceServiceConnection(
@@ -522,7 +523,9 @@ export class SDK {
    * @notice It allows a sender to collect the IPX rewards from all markets
    * @param txb A TransactionBlock to add the get_all_Rewards call
    */
-  public getAllRewards({ txb: _txb }: GetAllRewardsArgs): TransactionBlock {
+  public getAllRewards(
+    { txb: _txb }: GetAllRewardsArgs = { txb: undefined },
+  ): TransactionBlock {
     const objects = MONEY_MARKET_OBJECTS[this.network];
 
     const txb = _txb ? _txb : new TransactionBlock();
