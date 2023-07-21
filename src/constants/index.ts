@@ -66,9 +66,9 @@ export const MONEY_MARKET_OBJECTS = {
 export const MONEY_MARKET_KEYS = {
   [Network.DEVNET]: [],
   [Network.TESTNET]: [
-    '0x02871464ed71b80969b32f2b23c981b085866485ba5368c0f59588fcc0dbce47::suid::SUID',
-    SUI_TYPE_ARG,
     '0xb8656a09a489819f07c444cb4a4a61a3b482a5ea994fd71b0a643ffc1c2f2dd0::ieth::IETH',
+    SUI_TYPE_ARG,
+    '0x02871464ed71b80969b32f2b23c981b085866485ba5368c0f59588fcc0dbce47::suid::SUID',
   ],
   [Network.MAINNET]: [],
 } as Record<Network, ReadonlyArray<string>>;
