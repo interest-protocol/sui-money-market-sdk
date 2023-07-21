@@ -73,7 +73,6 @@ export interface BorrowArgs extends EntryFuncArgs {
 
 export interface RepayArgs extends EntryFuncArgs {
   assetList: Coin[];
-  assetValue: Amount;
   assetType: CoinType;
   principalToRepay: Amount;
 }
