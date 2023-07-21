@@ -26,13 +26,13 @@ export const MONEY_MARKET_OBJECTS = {
   },
   [Network.TESTNET]: {
     DASHBOARD_PACKAGE_ID:
-      '0x4bd091284f31a1b180515ba47a711d588c22ee2d62b2082d3fd9b09a45736f78',
+      '0xddb116dee5d5078d303d6488d12eef8a6ad8b75d5db98efa4d29b9c5db7b89e3',
     MONEY_MARKET_PACKAGE_ID:
-      '0xe8188db486c521ddaa41508ef64cc8626c6039f1285b16ef6837bc3ade0ff5ec',
+      '0x0859f26d72943f64542c193938cd1cc420730203ced8f350e42a9b16a490f5c5',
     MONEY_MARKET_STORAGE:
-      '0x35685e73c360200e259cb2cb9b79bd370341a3c0c8bacc4bc8151514a33473e2',
+      '0x49efffe81e703cafc6765f97cb6c90e29c656380f405bf927abc33dab5a75f83',
     INTEREST_RATE_STORAGE:
-      '0xdfa7954c7c9c32e2d1d5f24529fbb860e77b82cb56b6fe3a2c1e7faf711dcd65',
+      '0xd8a61d813a3475bb5136f86b57ac4218f0f5b97bb69fd4f008aff6db4a5554e0',
     ORACLE_PACKAGE_ID:
       '0xbd5fc6e8494555f8f01e8b75e920532b560b7a71eabd439aa2d0dbeae7b81653',
     ORACLE_STORAGE:
@@ -102,7 +102,6 @@ marketBCS.registerStructType('Market', {
   total_loan_elastic: BCS.U64,
   total_loan_base: BCS.U64,
   borrow_cap: BCS.U64,
-  collateral_cap: BCS.U64,
   ltv: BCS.U256,
   accrued_timestamp: BCS.U64,
   can_be_collateral: BCS.BOOL,

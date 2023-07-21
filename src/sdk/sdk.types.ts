@@ -33,7 +33,6 @@ export interface MoneyMarket {
   totalLoanElastic: BigNumber;
   totalLoanBase: BigNumber;
   borrowCap: BigNumber;
-  collateralCap: BigNumber;
   LTV: BigNumber;
   accruedTimestamp: BigNumber;
   decimals: number;

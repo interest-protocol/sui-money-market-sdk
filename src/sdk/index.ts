@@ -164,7 +164,6 @@ export class SDK {
           totalLoanElastic,
           totalLoanBase,
           borrowCap: BigNumber(propOr(0, 'borrow_cap', data)),
-          collateralCap: BigNumber(propOr(0, 'collateral_cap', data)),
           LTV: BigNumber(propOr(0, 'ltv', data)),
           accruedTimestamp,
           decimals: MONEY_MARKET_DECIMALS[this.network][key],
@@ -372,17 +371,14 @@ export class SDK {
    * @param txb A TransactionBlock to add the repay call
    * @param assetType The type of the Coin
    * @param principalToRepay The number of principal shares to repay.
-   * @param assetValue The value of coins to send
    * @param assetList A list of coins to send
    */
   public repay({
     txb: _txb,
     assetType,
     principalToRepay,
-    assetValue,
     assetList,
   }: RepayArgs): TransactionBlock {
-    invariant(+assetValue > 0, 'assetValue must be greater than zero');
     invariant(
       +principalToRepay > 0,
       'principalToRepay must be greater than zero',
@@ -407,7 +403,6 @@ export class SDK {
           txb.makeMoveVec({
             objects: assetList,
           }),
-          txb.pure(assetValue, BCS.U64),
           txb.pure(principalToRepay, BCS.U64),
         ],
       });
@@ -422,7 +417,6 @@ export class SDK {
           txb.makeMoveVec({
             objects: assetList,
           }),
-          txb.pure(assetValue, BCS.U64),
           txb.pure(principalToRepay, BCS.U64),
         ],
       });
