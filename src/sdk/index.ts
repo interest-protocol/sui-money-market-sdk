@@ -134,8 +134,12 @@ export class SDK {
 
       const totalLoanElastic = BigNumber(propOr(0, 'total_loan_elastic', data));
 
-      const cash = BigNumber(propOr(0, 'cash', data));
       const borrowCap = BigNumber(propOr(0, 'borrow_cap', data));
+
+      const cash =
+        key === this.getSUIDType()
+          ? borrowCap
+          : BigNumber(propOr(0, 'cash', data));
 
       const availableCash = totalLoanElastic.gte(borrowCap)
         ? BigNumber(0)
