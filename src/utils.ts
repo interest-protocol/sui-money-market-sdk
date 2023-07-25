@@ -1,4 +1,5 @@
 import { DevInspectResults } from '@mysten/sui.js';
+import { BigNumber } from 'bignumber.js';
 import { head, propOr } from 'ramda';
 
 export const getReturnValuesFromInspectResults = (
@@ -16,3 +17,5 @@ export const getReturnValuesFromInspectResults = (
 
   return returnValues ? returnValues : null;
 };
+
+export const bnMin = (x: BigNumber, y: BigNumber) => (x.gt(y) ? y : x);

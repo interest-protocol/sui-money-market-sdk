@@ -22,6 +22,7 @@ export interface MoneyMarket {
   supplyRatePerYear: BigNumber; // 1e16 means 1% || 1e18 means 100%
   borrowRatePerYear: BigNumber; // 1e16 means 1% || 1e18 means 100%
   cash: BigNumber; // Coins available to be borrowed
+  availableCash: BigNumber;
   collateralEnabled: boolean;
   allocationPoints: BigNumber; // For IPX rewards
   userPrincipal: BigNumber;

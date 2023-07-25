@@ -27,7 +27,7 @@ import {
   SWITCHBOARD_AGGREGATOR_IDS,
   ZERO_ADDRESS,
 } from '@/constants';
-import { getReturnValuesFromInspectResults } from '@/utils';
+import { bnMin, getReturnValuesFromInspectResults } from '@/utils';
 
 import { Rebase } from './rebase';
 import {
@@ -134,6 +134,13 @@ export class SDK {
 
       const totalLoanElastic = BigNumber(propOr(0, 'total_loan_elastic', data));
 
+      const cash = BigNumber(propOr(0, 'cash', data));
+      const borrowCap = BigNumber(propOr(0, 'borrow_cap', data));
+
+      const availableCash = totalLoanElastic.gte(borrowCap)
+        ? BigNumber(0)
+        : bnMin(borrowCap.minus(totalLoanElastic), cash);
+
       return {
         ...acc,
         [key]: {
@@ -143,7 +150,7 @@ export class SDK {
           borrowRatePerYear: BigNumber(
             propOr(0, 'borrow_rate', data),
           ).multipliedBy(MILLISECONDS_PER_YEAR),
-          cash: BigNumber(propOr(0, 'cash', data)),
+          cash,
           collateralEnabled: propOr(
             false,
             'collateral_enabled',
@@ -163,7 +170,7 @@ export class SDK {
           totalCollateralBase,
           totalLoanElastic,
           totalLoanBase,
-          borrowCap: BigNumber(propOr(0, 'borrow_cap', data)),
+          borrowCap,
           LTV: BigNumber(propOr(0, 'ltv', data)),
           accruedTimestamp,
           decimals: MONEY_MARKET_DECIMALS[this.network][key],
@@ -172,6 +179,7 @@ export class SDK {
             totalCollateralBase,
             totalCollateralElastic,
           ),
+          availableCash,
         },
       };
     }, {} as MoneyMarketRecord);
